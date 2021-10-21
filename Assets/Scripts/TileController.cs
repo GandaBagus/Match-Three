@@ -49,28 +49,33 @@ public class TileController : MonoBehaviour
 
     private void OnMouseUp()
     {
+    // Non Selectable conditions
         if (_render.sprite == null || _board.IsAnimating || _game.IsGameOver)
         {
             return;
         }
         
         SoundManager.Instance.PlayTap();
-
+        
+          // Already selected this tile?
         if (_isSelected)
         {
             Deselect();
         }
         else
         {
+            // if nothing selected yet
             if (previousSelected == null)
             {
                 Select();
             }
             else
             {
+                 // is this an adjacent tile?
                 if (GetAllNeighborTiles().Contains(previousSelected))
                 {
                     TileController otherTile = previousSelected;
+                    // swap tile
                     previousSelected.Deselect();
                     
                     SwapTile(otherTile, 
@@ -218,7 +223,8 @@ public class TileController : MonoBehaviour
     {
         Vector2 startPos = transform.position;
         float time = 0.0f;
-
+        
+        // run animation on next frame for safety reason
         yield return new WaitForEndOfFrame();
 
         while (time < MoveDuration)
